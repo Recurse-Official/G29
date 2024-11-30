@@ -5,6 +5,8 @@ import Redis from 'ioredis';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import publicRoutes from './routes/publicRoute.js'; 
+import setterRoutes from './routes/setterRoute.js'
+import studentRoutes from './routes/studentRoute.js'
 import connectDB from './config/db.js';
 
 const redisClient = new Redis();
@@ -27,7 +29,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 connectDB();
+app.use('/student',studentRoutes)
 app.use('/api', publicRoutes); 
+app.use('/setter',setterRoutes)
 
 io.on('connection', (socket) => {
   console.log('A user connected');

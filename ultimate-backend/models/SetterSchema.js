@@ -44,4 +44,4 @@ const setterSchema = new mongoose.Schema({
     }
 })
 
-modules.export=mongoose.model("Setter",setterSchema)
+export default mongoose.model("Setter",setterSchema)
