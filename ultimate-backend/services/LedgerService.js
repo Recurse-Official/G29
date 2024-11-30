@@ -1,5 +1,4 @@
- const redis=require('ioredis')
- const redisClient=new redis()
+import redisClient from "../config/redisClient"
  const PushToQueue=async (enrollmentId,publicKey,questionId,selectedOption,signature,isverified)=>{
    try{
     const timeStamp=new Date().toISOString()

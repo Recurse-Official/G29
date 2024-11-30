@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const encryptData = (data, key) => {
+export const encryptData = (data, key) => {
     const algorithm = 'aes-256-cbc';
     const iv = crypto.randomBytes(16); 
 
@@ -19,7 +19,7 @@ const encryptData = (data, key) => {
     };
 };
 
-const decryptData = (encryptedData, key, iv) => {
+export const decryptData = (encryptedData, iv) => {
     const algorithm = 'aes-256-cbc';
     const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), Buffer.from(iv, 'hex'));
     
@@ -39,9 +39,9 @@ const data = {
     marks: 5
 };
 
-const key = crypto.randomBytes(32); 
-const { iv, encryptedData } = encryptData(data, key);
-console.log('Encrypted Data:', { iv, encryptedData });
 
-const decryptedData = decryptData(encryptedData, key, iv);
-console.log('Decrypted Data:', decryptedData);
+// const { iv, encryptedData } = encryptData(data, key);
+// console.log('Encrypted Data:', { iv, encryptedData });
+
+// const decryptedData = decryptData(encryptedData, key, iv);
+// console.log('Decrypted Data:', decryptedData);

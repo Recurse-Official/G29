@@ -4,8 +4,6 @@ import { Server as socketIo } from 'socket.io';
 import Redis from 'ioredis';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import publicRoutes from './routes/publicRoute.js'; 
-import connectDB from './config/db.js';
 
 const redisClient = new Redis();
 const app = express();
@@ -26,8 +24,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-connectDB();
-app.use('/api', publicRoutes); 
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -54,6 +50,20 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
+  });
+});
+
+app.post('/submit', (req, res) => {
+  const { publicKey, enrollmentId, questionId, chosenOption, signature, isverified } = req.body;
+  const newItem = { publicKey, enrollmentId, questionId, chosenOption, signature, isverified };
+
+  redisClient.rpush('queue', JSON.stringify(newItem), (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error pushing to Redis' });
+    }
+    console.log("New item pushed to queue:", newItem);
+    io.emit('newQueueItem', newItem);
+    res.status(200).json({ message: 'Item added to the queue' });
   });
 });
 
