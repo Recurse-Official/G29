@@ -4,12 +4,11 @@ import QuestionPaper from '../models/QuestionPaperSchema.js';
 
 const rpushAsync = promisify(redisClient.rpush).bind(redisClient);
 const lrangeAsync = promisify(redisClient.lrange).bind(redisClient);
-
 export const addItemToQueue = async (newItem) => {
   try {
     await rpushAsync('queue', JSON.stringify(newItem));
   } catch (err) {
-    throw new Error(`Error adding item to queue: ${err.message}`);
+    console.error('Error adding item to queue:', err);
   }
 };
 
@@ -24,11 +23,13 @@ export const fetchQueueData = async () => {
 
 export const getQuestionsService=async()=>{
     try{
+      console.log("code reached service")
         const questions = await QuestionPaper.find();
         if(questions){
-            return question;
+            return questions;
         }
     }catch(error){
+        console.log(error)
         console.log("there is an error in this code -fetch all the questions");
     }
 }

@@ -13,7 +13,9 @@ async function insertSampleData() {
                 question: 'What is the capital of Japan?',
                 content: 'Select the correct answer from the options below.',
                 options: ['Tokyo', 'Seoul', 'Beijing', 'Bangkok'],
-                marks: 5
+                marks: 5, 
+                correctOption:"A",
+
             },
             {
                 QuestionId: 'Q002',
@@ -22,7 +24,8 @@ async function insertSampleData() {
                 question: 'Which planet is known as the Red Planet?',
                 content: 'Choose the correct option.',
                 options: ['Earth', 'Mars', 'Jupiter', 'Saturn'],
-                marks: 3
+                marks: 3,
+                correctOption:"A",
             },
             {
                 QuestionId: 'Q003',
@@ -31,7 +34,8 @@ async function insertSampleData() {
                 question: 'What is the largest mammal in the world?',
                 content: 'Select one option.',
                 options: ['Elephant', 'Blue Whale', 'Giraffe', 'Great White Shark'],
-                marks: 4
+                marks: 4,
+                correctOption:"A",
             },
             {
                 QuestionId: 'Q004',
@@ -40,7 +44,8 @@ async function insertSampleData() {
                 question: 'What is the chemical symbol for water?',
                 content: 'Choose the correct answer.',
                 options: ['H2O', 'O2', 'CO2', 'NaCl'],
-                marks: 2
+                marks: 2,
+                correctOption:"A",
             },
             {
                 QuestionId: 'Q005',
@@ -48,6 +53,7 @@ async function insertSampleData() {
                 examId: 'E002',
                 question: "Who wrote \"Romeo and Juliet\"?",
                 content: "Select the correct author.",
+                correctOption:"A",
                 options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"],
                 marks: 3
             }

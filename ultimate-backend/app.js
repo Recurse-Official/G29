@@ -32,28 +32,46 @@ app.use('/api', publicRoutes);
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+
   redisClient.lrange('queue', 0, -1, (err, queueData) => {
     if (err) {
       console.error('Error fetching queue data from Redis:', err);
     } else {
       const parsedQueue = queueData.map((item) => JSON.parse(item));
-      socket.emit('queueData', parsedQueue);
+      socket.emit('queueData', parsedQueue); 
     }
   });
 
+ 
   socket.on('newQueueItem', (newItem) => {
     redisClient.rpush('queue', JSON.stringify(newItem), (err) => {
       if (err) {
         console.error("Error pushing to Redis:", err);
       } else {
         console.log("New item pushed to queue:", newItem);
-        io.emit('newQueueItem', newItem);
+        io.emit('newQueueItem', newItem); 
       }
     });
   });
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
+  });
+});
+
+//ADDING EXCEPTION ROUTE 
+
+app.post('/api2/submit', (req, res) => {
+  const { publicKey, enrollmentId, questionId, chosenOption, signature, isverified } = req.body;
+  const newItem = { publicKey, enrollmentId, questionId, chosenOption, signature, isverified };
+
+  redisClient.rpush('queue', JSON.stringify(newItem), (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error pushing to Redis' });
+    }
+    console.log("New item pushed to queue:", newItem);
+    io.emit('newQueueItem', newItem);  
+    res.status(200).json({ message: 'Item added to the queue' });
   });
 });
 
