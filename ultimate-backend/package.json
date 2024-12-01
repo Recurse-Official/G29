@@ -18,6 +18,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.3",
     "shamir-secret-sharing": "^0.0.3",
     "shamirs-secret-sharing": "^2.0.0",

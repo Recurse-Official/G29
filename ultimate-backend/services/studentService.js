@@ -1,6 +1,5 @@
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Student from '../models/StudentSchema.js';
+import St from '../models/StudentSchema.js';
 
 
 export const registerStudent = async (enrollmentId, phone, name, password) => {
@@ -25,11 +24,9 @@ export const loginStudent = async (enrollmentId, password) => {
     throw new Error('Invalid enrollment ID');
   }
 
-  const isMatch = await student.comparePassword(password);
-  if (!isMatch) {
-    throw new Error('Invalid password');
+  if(passwod!==student.password){
+    console.log("password is incorrect")
   }
-
   const token = jwt.sign({ studentId: student._id }, 'secretKey', { expiresIn: '1h' });
 
   return { student, token };

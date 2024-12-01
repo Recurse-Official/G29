@@ -49,3 +49,6 @@ const studentSchema=new mongoose.Schema({
         default: ""
     }
 })
+
+
+export default mongoose.model("Student",studentSchema)

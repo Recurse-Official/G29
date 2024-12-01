@@ -20,7 +20,7 @@ export const setQuestion = async (req, res) => {
     const { question, setterId,options, correctOption, examId, guardianIds } = req.body;
 
     try {
-        // Validate input data
+       
         if (!question || !options || !correctOption || !examId || !guardianIds) {
             return res.status(400).json({ error: 'All fields are required' });
         }
@@ -28,11 +28,9 @@ export const setQuestion = async (req, res) => {
         const questionId = new mongoose.Types.ObjectId().toString();
         const key = generateRandomKey();
 
-        // Encrypt question and options
         const encryptedQuestion = encrypt(question, key);
         const encryptedOptions = options.map(option => encrypt(option, key));
 
-        // Create new question paper
         const questionPaper = new QuestionPaper({
             QuestionId: questionId,
             setterId: setterId,
@@ -70,37 +68,31 @@ export const setQuestion = async (req, res) => {
     }
 };
 
-// Get question for the guardians (decrypt it once all guardians have come together)
 export const getQuestion = async (req, res) => {
     const { questionId } = req.params;
 
     try {
-        // Retrieve the question paper based on the questionId
         const questionPaper = await QuestionPaper.findOne({ QuestionId: questionId });
 
         if (!questionPaper) {
             return res.status(404).json({ message: 'Question paper not found' });
         }
 
-        // Ensure guardianShares are available in request
         if (!req.guardianShares || req.guardianShares.length < 2) {
             return res.status(400).json({ message: 'Not enough shares to reconstruct key' });
         }
 
-        // Reconstruct the encryption key using Shamir's secret shares
         const key = reconstructShamirKey(req.guardianShares); 
 
-        // Decrypt the question and options
         const decryptedQuestion = decrypt(questionPaper.question, key, questionPaper.iv);
         const decryptedOptions = questionPaper.options.map(option => decrypt(option, key, questionPaper.iv));
 
-        // Send the decrypted question and options
         res.status(200).json({
             question: decryptedQuestion,
             options: decryptedOptions,
         });
     } catch (error) {
-        console.error('Error retrieving question:', error); // Log the error
+        console.error('Error retrieving question:', error); 
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
